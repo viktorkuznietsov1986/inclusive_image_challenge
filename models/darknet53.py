@@ -59,9 +59,10 @@ def darknet_classifier(input_shape, num_classes):
     inputs = Input(shape=input_shape)
     x = darknet_body(inputs)
     x = Flatten()(x)
-    x = Dense(num_classes*2)(x)
+    x = Dense(num_classes)(x)
     x = Dense(num_classes)(x)
     x = Activation('sigmoid')(x)
+
     return Model(inputs, x)
 
 
