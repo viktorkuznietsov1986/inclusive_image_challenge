@@ -1,6 +1,6 @@
 from keras import Input, Model
 from keras.layers import Conv2D, BatchNormalization, ZeroPadding2D, Add, Activation, Flatten, \
-    Dense
+    Dense, Lambda
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 from keras.regularizers import l2
 from keras.layers.advanced_activations import LeakyReLU
@@ -57,7 +57,8 @@ def darknet_body(x):
 
 def darknet_classifier(input_shape, num_classes):
     inputs = Input(shape=input_shape)
-    x = darknet_body(inputs)
+    x = Lambda(lambda img: (img/127.5)-1.)(inputs)
+    x = darknet_body(x)
     x = Flatten()(x)
     x = Dense(num_classes)(x)
     x = Dense(num_classes)(x)
