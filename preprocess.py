@@ -9,8 +9,8 @@ dim = (500, 500)
 raw_files = os.listdir(train_raw_dir)
 
 for index, file in enumerate(raw_files):
-    if index > 10:
-        break
+    #if index > 10:
+    #    break
 
     file_name = train_raw_dir + file
     image = cv2.imread(file_name)
