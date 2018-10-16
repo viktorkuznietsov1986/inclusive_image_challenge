@@ -1,8 +1,8 @@
 import cv2
 import os
 
-train_raw_dir = '../../train_data/'
-train_processed_dir = '../../train_data/scaled/'
+train_raw_dir = '../train_data/'
+train_processed_dir = '../train_data/scaled/'
 
 dim = (500, 500)
 
