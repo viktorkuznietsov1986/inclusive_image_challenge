@@ -1,12 +1,77 @@
+import os
+
 import sklearn
+import pandas as pd
+import numpy as np
+import cv2
 
 from models.darknet53 import darknet_classifier
 
-labels_file_name = './data/train_machine_labels.csv'
+labels_file_name = '../data/train_machine_labels.csv'
+labels_file = pd.read_csv(labels_file_name)
+
+classes_file_name = '../data/classes-trainable.csv'
+classes_file = pd.read_csv(classes_file_name)
+
+all_labels = classes_file['label_code']
+
+# set the number of labels which will be used as an output layer size for a model
+num_labels = len(all_labels)
+
+# build the index dictionary based on the labels collection
+labels_index = {label:idx for idx, label in enumerate(all_labels)}
+
+# retrieve the list of labels assigned to all images
+labels_set = set(all_labels)
+
+images_with_labels = {}
+
+# set up the threshold for the confidence of the machine label
+machine_label_threshold = .5
+
+train_images_dir = '../data/train/scaled/'
+scaled_train_images = os.listdir(train_images_dir)
+
+# need to get that data
+import pickle
+
+def prepare_data():
+    images_dict = {}
+
+    for index, image_file_name in enumerate(scaled_train_images):
+        # if index > 10:
+        #    break
+
+        image_file_name_wo_ext = image_file_name[:-4]
+        print (image_file_name_wo_ext)
+        lst = labels_file.loc[labels_file['ImageID'] == image_file_name_wo_ext]['LabelName'].tolist() # [labels_file['Confidence'] > machine_label_threshold]
+        images_dict[image_file_name_wo_ext] = lst
+
+def load_data():
+    with open('./data/train.pkl', 'rb') as handle:
+        data = pickle.load(handle)
+
+    return data
+
+prepare_data()
+
+data = load_data()
 
 # split the samples to train and validation sets
 from sklearn.model_selection import train_test_split
-train_samples, validation_samples = train_test_split(samples, test_size=0.02)
+train_samples, validation_samples = train_test_split(scaled_train_images, test_size=0.01)
+
+
+# do the multi-hot encoding
+def multi_hot_encode(x, num_classes):
+    labels_encoded = np.zeros(num_classes)
+
+    for label in x:
+        if label in labels_index:
+            label = labels_index[label]
+            labels_encoded[label] = 1
+
+    return labels_encoded
 
 # define the generator method which loads images in a batches
 def generator(samples, batch_size=32):
@@ -17,23 +82,47 @@ def generator(samples, batch_size=32):
             batch_samples = samples[offset:offset + batch_size]
 
             images = []
-            angles = []
+            labels = []
 
             for batch_sample in batch_samples:
-                center_name = data_folder_name + batch_sample[0].split('/')[-1]
-                center_image = cv2.imread(center_name)
-                center_angle = float(batch_sample[3])
-                images.extend([center_image, left_image, right_image])
-                angles.extend([center_angle, left_angle, right_angle])
+                image_name = train_images_dir + batch_sample
+                image = cv2.imread(image_name)
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                #image = cv2.resize(image, (300, 300))
+                key = batch_sample[:-4]
+                label = multi_hot_encode(data[key], num_labels)
+
+                images.append(image)
+                labels.append(label)
 
             X_train = np.array(images)
-            y_train = np.array(angles)
+            y_train = np.array(labels)
             yield sklearn.utils.shuffle(X_train, y_train)
 
 
-num_classes = 7178
 input_shape = (500, 500, 3)
 
-model = darknet_classifier(input_shape, num_classes)
+model = darknet_classifier(input_shape, num_labels)
 model.compile(loss="binary_crossentropy", optimizer='adam', metrics=["accuracy"])
 model.summary()
+
+num_epochs = 5
+
+batch_size = 8
+
+from keras.callbacks import ModelCheckpoint, EarlyStopping
+
+# trains the model
+# defined 2 callbacks: early stopping and checkpoint to save the model if the validation loss has been improved
+def train_model(model, train_generator, validation_generator, epochs=3):
+    early_stopping_callback = EarlyStopping(monitor='val_loss', patience=1)
+    checkpoint_callback = ModelCheckpoint('model.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+
+    model.fit_generator(train_generator, steps_per_epoch=len(train_samples)//batch_size, validation_data=validation_generator, validation_steps=len(validation_samples)//batch_size, epochs=epochs, callbacks=[early_stopping_callback, checkpoint_callback], )
+
+
+# compile and train the model using the generator function
+train_generator = generator(train_samples, batch_size=batch_size)
+validation_generator = generator(validation_samples, batch_size=batch_size)
+
+train_model(model, train_generator, validation_generator, num_epochs)
