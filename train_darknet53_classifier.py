@@ -60,7 +60,7 @@ def multi_hot_encode(x, num_classes):
     return labels_encoded
 
 
-input_shape = (160, 160, 3)
+input_shape = (150, 150, 3)
 
 # define the generator method which loads images in a batches
 def generator(samples, batch_size=32):
