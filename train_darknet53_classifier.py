@@ -8,10 +8,10 @@ import pickle
 
 from models.darknet53 import darknet_classifier
 
-labels_file_name = '../data/train_machine_labels.csv'
-labels_file = pd.read_csv(labels_file_name)
+#labels_file_name = './data/train_machine_labels.csv'
+#labels_file = pd.read_csv(labels_file_name)
 
-classes_file_name = '../data/classes-trainable.csv'
+classes_file_name = './data/classes-trainable.csv'
 classes_file = pd.read_csv(classes_file_name)
 
 all_labels = classes_file['label_code']
