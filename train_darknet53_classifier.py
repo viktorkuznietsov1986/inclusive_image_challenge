@@ -33,6 +33,8 @@ machine_label_threshold = .5
 train_images_dir = '../train_data/scaled/'
 scaled_train_images = os.listdir(train_images_dir)
 
+print (len(scaled_train_images))
+
 
 def load_data():
     with open('./data/train.pkl', 'rb') as handle:
@@ -94,7 +96,7 @@ model.summary()
 
 num_epochs = 5
 
-batch_size = 64
+batch_size = 32
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 
