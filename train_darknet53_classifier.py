@@ -54,10 +54,7 @@ train_samples, validation_samples = train_test_split(scaled_train_images, test_s
 def multi_hot_encode(x, num_classes):
     labels_encoded = np.zeros(num_classes)
 
-    for label in x:
-        if label in labels_index:
-            label = labels_index[label]
-            labels_encoded[label] = 1
+    labels_encoded[x] = 1
 
     return labels_encoded
 
