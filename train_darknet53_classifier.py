@@ -96,7 +96,7 @@ model.summary()
 
 num_epochs = 5
 
-batch_size = 8
+batch_size = 4
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 
