@@ -59,6 +59,9 @@ def multi_hot_encode(x, num_classes):
 
     return labels_encoded
 
+
+input_shape = (160, 160, 3)
+
 # define the generator method which loads images in a batches
 def generator(samples, batch_size=32):
     num_samples = len(samples)
@@ -74,7 +77,7 @@ def generator(samples, batch_size=32):
                 image_name = train_images_dir + batch_sample
                 image = cv2.imread(image_name)
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                image = cv2.resize(image, (180, 180))
+                image = cv2.resize(image, (input_shape[0], input_shape[1]))
                 key = batch_sample[:-4]
 
                 if key in data:
@@ -89,8 +92,6 @@ def generator(samples, batch_size=32):
             y_train = np.array(labels)
             yield sklearn.utils.shuffle(X_train, y_train)
 
-
-input_shape = (180, 180, 3)
 
 model = darknet_classifier(input_shape, num_labels)
 model.compile(loss="binary_crossentropy", optimizer='adam', metrics=["accuracy"])
