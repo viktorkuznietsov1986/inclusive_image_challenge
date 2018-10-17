@@ -76,7 +76,7 @@ def generator(samples, batch_size=32):
                 image_name = train_images_dir + batch_sample
                 image = cv2.imread(image_name)
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                #image = cv2.resize(image, (300, 300))
+                image = cv2.resize(image, (416, 416))
                 key = batch_sample[:-4]
                 label = multi_hot_encode(data[key], num_labels)
 
@@ -88,7 +88,7 @@ def generator(samples, batch_size=32):
             yield sklearn.utils.shuffle(X_train, y_train)
 
 
-input_shape = (500, 500, 3)
+input_shape = (416, 416, 3)
 
 model = darknet_classifier(input_shape, num_labels)
 model.compile(loss="binary_crossentropy", optimizer='adam', metrics=["accuracy"])
@@ -96,7 +96,7 @@ model.summary()
 
 num_epochs = 5
 
-batch_size = 8
+batch_size = 32
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 
