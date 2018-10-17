@@ -30,12 +30,12 @@ images_with_labels = {}
 # set up the threshold for the confidence of the machine label
 machine_label_threshold = .5
 
-train_images_dir = '../../train_data/scaled/'
+train_images_dir = '../train_data/scaled/'
 scaled_train_images = os.listdir(train_images_dir)
 
 
 def load_data():
-    with open('../data/train.pkl', 'rb') as handle:
+    with open('./data/train.pkl', 'rb') as handle:
         data = pickle.load(handle)
 
     return data
