@@ -74,9 +74,13 @@ def generator(samples, batch_size=32):
                 image_name = train_images_dir + batch_sample
                 image = cv2.imread(image_name)
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                image = cv2.resize(image, (150, 150))
+                image = cv2.resize(image, (180, 180))
                 key = batch_sample[:-4]
-                label = multi_hot_encode(data[key], num_labels)
+
+                if key in data:
+                    label = multi_hot_encode(data[key], num_labels)
+                else:
+                    label = np.zeros(num_labels)
 
                 images.append(image)
                 labels.append(label)
@@ -86,7 +90,7 @@ def generator(samples, batch_size=32):
             yield sklearn.utils.shuffle(X_train, y_train)
 
 
-input_shape = (150, 150, 3)
+input_shape = (180, 180, 3)
 
 model = darknet_classifier(input_shape, num_labels)
 model.compile(loss="binary_crossentropy", optimizer='adam', metrics=["accuracy"])
@@ -101,10 +105,10 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping
 # trains the model
 # defined 2 callbacks: early stopping and checkpoint to save the model if the validation loss has been improved
 def train_model(model, train_generator, validation_generator, epochs=3):
-    early_stopping_callback = EarlyStopping(monitor='val_loss', patience=1)
+    #early_stopping_callback = EarlyStopping(monitor='val_loss', patience=1) # no need to do early stopping as the model needs baby-sitting
     checkpoint_callback = ModelCheckpoint('model.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
 
-    model.fit_generator(train_generator, steps_per_epoch=len(train_samples)//batch_size, validation_data=validation_generator, validation_steps=len(validation_samples)//batch_size, epochs=epochs, callbacks=[early_stopping_callback, checkpoint_callback], )
+    model.fit_generator(train_generator, steps_per_epoch=len(train_samples)//batch_size, validation_data=validation_generator, validation_steps=len(validation_samples)//batch_size, epochs=epochs, callbacks=[checkpoint_callback], )
 
 
 # compile and train the model using the generator function

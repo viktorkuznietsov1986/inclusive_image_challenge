@@ -22,7 +22,7 @@ labels_set = set(all_labels)
 images_with_labels = {}
 
 # set up the threshold for the confidence of the machine label
-machine_label_threshold = .4
+machine_label_threshold = .1
 
 processed_labels = labels_file.loc[(labels_file['Confidence'] > machine_label_threshold), ['ImageID', 'LabelName']]
 
