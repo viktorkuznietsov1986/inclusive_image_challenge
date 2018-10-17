@@ -28,7 +28,7 @@ labels_set = set(all_labels)
 images_with_labels = {}
 
 # set up the threshold for the confidence of the machine label
-machine_label_threshold = .5
+machine_label_threshold = .4
 
 train_images_dir = '../train_data/scaled/'
 scaled_train_images = os.listdir(train_images_dir)
@@ -44,6 +44,7 @@ def load_data():
 
 
 data = load_data()
+print (len(data))
 
 # split the samples to train and validation sets
 from sklearn.model_selection import train_test_split
