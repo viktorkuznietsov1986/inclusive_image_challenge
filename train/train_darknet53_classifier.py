@@ -4,6 +4,7 @@ import sklearn
 import pandas as pd
 import numpy as np
 import cv2
+import pickle
 
 from models.darknet53 import darknet_classifier
 
@@ -29,31 +30,16 @@ images_with_labels = {}
 # set up the threshold for the confidence of the machine label
 machine_label_threshold = .5
 
-train_images_dir = '../data/train/scaled/'
+train_images_dir = '../../train_data/scaled/'
 scaled_train_images = os.listdir(train_images_dir)
 
-# need to get that data
-import pickle
-
-def prepare_data():
-    images_dict = {}
-
-    for index, image_file_name in enumerate(scaled_train_images):
-        # if index > 10:
-        #    break
-
-        image_file_name_wo_ext = image_file_name[:-4]
-        print (image_file_name_wo_ext)
-        lst = labels_file.loc[labels_file['ImageID'] == image_file_name_wo_ext]['LabelName'].tolist() # [labels_file['Confidence'] > machine_label_threshold]
-        images_dict[image_file_name_wo_ext] = lst
 
 def load_data():
-    with open('./data/train.pkl', 'rb') as handle:
+    with open('../data/train.pkl', 'rb') as handle:
         data = pickle.load(handle)
 
     return data
 
-prepare_data()
 
 data = load_data()
 
@@ -108,7 +94,7 @@ model.summary()
 
 num_epochs = 5
 
-batch_size = 8
+batch_size = 64
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 
