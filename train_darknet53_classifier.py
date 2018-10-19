@@ -48,7 +48,7 @@ print (len(data))
 
 # split the samples to train and validation sets
 from sklearn.model_selection import train_test_split
-train_samples, validation_samples = train_test_split(scaled_train_images, test_size=0.01)
+train_samples, validation_samples = train_test_split(scaled_train_images, test_size=0.08)
 
 
 # do the multi-hot encoding
@@ -80,10 +80,10 @@ def generator(samples, batch_size=32):
                 image = cv2.resize(image, (input_shape[0], input_shape[1]))
                 key = batch_sample[:-4]
 
-                if key in data:
-                    label = multi_hot_encode(data[key], num_labels)
-                else:
-                    label = np.zeros(num_labels)
+                #if key in data:
+                label = multi_hot_encode(data[key], num_labels)
+                #else:
+                #    label = np.zeros(num_labels)
 
                 images.append(image)
                 labels.append(label)
