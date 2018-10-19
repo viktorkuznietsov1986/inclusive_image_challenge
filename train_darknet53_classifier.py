@@ -46,9 +46,19 @@ def load_data():
 data = load_data()
 print (len(data))
 
+train_images = []
+
+for train_image in scaled_train_images:
+    key = train_image[:-4]
+
+    if key in data:
+        train_images.append(train_image)
+
+print (len(train_images))
+
 # split the samples to train and validation sets
 from sklearn.model_selection import train_test_split
-train_samples, validation_samples = train_test_split(scaled_train_images, test_size=0.08)
+train_samples, validation_samples = train_test_split(train_images, test_size=0.09)
 
 
 # do the multi-hot encoding
