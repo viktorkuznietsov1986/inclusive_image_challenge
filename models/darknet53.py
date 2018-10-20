@@ -60,7 +60,10 @@ def darknet_classifier(input_shape, num_classes):
     x = Lambda(lambda img: (img/127.5)-1.)(inputs)
     x = darknet_body(x)
     x = Flatten()(x)
-    x = Dense(num_classes)(x)
+    x = BatchNormalization()(x)
+    x = Dense(2*num_classes)(x)
+    x = BatchNormalization()(x)
+    x = Activation('relu')(x)
     x = Dense(num_classes)(x)
     x = Activation('sigmoid')(x)
 
