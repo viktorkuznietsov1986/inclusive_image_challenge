@@ -49,9 +49,9 @@ def darknet_body(x):
     x = conv2d_block_leaky(x, 32, 3)
     x = darknet_block(x, 64, 1)
     x = darknet_block(x, 128, 2)
-    x = darknet_block(x, 256, 3)
-    #x = darknet_block(x, 512, 8)
-    #x = darknet_block(x, 1024, 4)
+    x = darknet_block(x, 256, 8)
+    x = darknet_block(x, 512, 8)
+    x = darknet_block(x, 1024, 4)
 
     return x
 
@@ -59,7 +59,6 @@ def darknet_classifier(input_shape, num_classes):
     inputs = Input(shape=input_shape)
     x = Lambda(lambda img: (img/127.5)-1.)(inputs)
     x = darknet_body(x)
-    x = MaxPooling2D(pool_size=2)(x)
     x = Flatten()(x)
     x = Dense(num_classes)(x)
     x = BatchNormalization()(x)
