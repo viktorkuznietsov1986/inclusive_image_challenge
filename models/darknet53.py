@@ -49,7 +49,7 @@ def darknet_body(x):
     x = conv2d_block_leaky(x, 32, 3)
     x = darknet_block(x, 64, 1)
     x = darknet_block(x, 128, 2)
-    x = darknet_block(x, 256, 8)
+    x = darknet_block(x, 256, 4)
     #x = darknet_block(x, 512, 8)
     #x = darknet_block(x, 1024, 4)
 
