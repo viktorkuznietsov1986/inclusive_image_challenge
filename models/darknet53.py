@@ -1,6 +1,6 @@
 from keras import Input, Model
 from keras.layers import Conv2D, BatchNormalization, ZeroPadding2D, Add, Activation, Flatten, \
-    Dense, Lambda
+    Dense, Lambda, MaxPooling2D
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 from keras.regularizers import l2
 from keras.layers.advanced_activations import LeakyReLU
@@ -61,6 +61,7 @@ def darknet_classifier(input_shape, num_classes):
     x = darknet_body(x)
     x = Flatten()(x)
     x = BatchNormalization()(x)
+    x = MaxPooling2D(pool_size=2)(x)
     x = Dense(num_classes)(x)
     x = BatchNormalization()(x)
     x = Activation('relu')(x)
