@@ -34,7 +34,7 @@ def conv2d_block_leaky(x, filters, kernel_size, strides=1):
 
 def darknet_block(x, filters, num_blocks):
     x = ZeroPadding2D(((1, 0), (0, 1)))(x)
-    x = conv2d_block_leaky(x, filters, (3, 3), strides=2)
+    #x = conv2d_block_leaky(x, filters, (3, 3), strides=2)
 
     for i in range(num_blocks):
         out = conv2d_block_leaky(x, filters // 2, kernel_size=(1, 1), strides=1)
@@ -50,8 +50,8 @@ def darknet_body(x):
     x = darknet_block(x, 64, 1)
     x = darknet_block(x, 128, 2)
     x = darknet_block(x, 256, 8)
-    x = darknet_block(x, 512, 8)
-    x = darknet_block(x, 1024, 4)
+    #x = darknet_block(x, 512, 8)
+    #x = darknet_block(x, 1024, 4)
 
     return x
 
