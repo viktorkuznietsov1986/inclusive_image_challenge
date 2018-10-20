@@ -61,7 +61,7 @@ def darknet_classifier(input_shape, num_classes):
     x = darknet_body(x)
     x = Flatten()(x)
     x = BatchNormalization()(x)
-    x = Dense(2*num_classes)(x)
+    x = Dense(num_classes)(x)
     x = BatchNormalization()(x)
     x = Activation('relu')(x)
     x = Dense(num_classes)(x)
