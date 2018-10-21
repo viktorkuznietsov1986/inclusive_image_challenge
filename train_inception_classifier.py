@@ -69,7 +69,7 @@ def multi_hot_encode(x, num_classes):
     return labels_encoded
 
 
-input_shape = (300, 300, 3)
+input_shape = (450, 450, 3)
 
 # define the generator method which loads images in a batches
 def generator(samples, batch_size=32):
@@ -116,7 +116,7 @@ model.summary()
 
 num_epochs = 5
 
-batch_size = 8
+batch_size = 32
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 

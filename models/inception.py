@@ -9,7 +9,7 @@ from keras import applications
 def build_inceptionv3_based_classifier(input_shape, num_classes):
     inceptionv3 = applications.InceptionV3(include_top=False,
                                     input_shape=input_shape)
-    inceptionv3.trainable = False
+    inceptionv3.trainable = True
 
     model = Sequential()
     model.add(inceptionv3)
