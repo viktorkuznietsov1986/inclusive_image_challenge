@@ -8,7 +8,7 @@ import pickle
 
 #labels_file_name = './data/train_machine_labels.csv'
 #labels_file = pd.read_csv(labels_file_name)
-from inception import build_inceptionv3_based_classifier
+from models.inception import build_inceptionv3_based_classifier
 
 classes_file_name = './data/classes-trainable.csv'
 classes_file = pd.read_csv(classes_file_name)
