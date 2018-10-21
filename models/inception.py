@@ -14,7 +14,6 @@ def build_inceptionv3_based_classifier(input_shape, num_classes):
     model = Sequential()
     model.add(inceptionv3)
     model.add(GlobalAveragePooling2D())
-    model.add(Dropout(0.5))
     model.add(Dense(num_classes,
                         activation='sigmoid'))
 
