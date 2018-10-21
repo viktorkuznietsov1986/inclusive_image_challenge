@@ -71,6 +71,9 @@ def multi_hot_encode(x, num_classes):
 
 input_shape = (450, 450, 3)
 
+def normalize(img):
+    return (img / 127.5) - 1.
+
 # define the generator method which loads images in a batches
 def generator(samples, batch_size=32):
     num_samples = len(samples)
@@ -87,6 +90,7 @@ def generator(samples, batch_size=32):
                 image = cv2.imread(image_name)
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 image = cv2.resize(image, (input_shape[0], input_shape[1]))
+                image = normalize(image)
                 key = batch_sample[:-4]
 
                 #if key in data:
@@ -116,7 +120,7 @@ model.summary()
 
 num_epochs = 5
 
-batch_size = 32
+batch_size = 16
 
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 
