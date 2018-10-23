@@ -4,7 +4,7 @@ import os
 train_raw_dir = '../train_data/'
 train_processed_dir = '../scaled/'
 
-dim = (500, 500)
+dim = (300, 300)
 
 raw_files = os.listdir(train_raw_dir)
 

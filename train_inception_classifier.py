@@ -29,7 +29,7 @@ images_with_labels = {}
 # set up the threshold for the confidence of the machine label
 machine_label_threshold = .4
 
-train_images_dir = '../train_data/scaled/'
+train_images_dir = '../scaled/'
 scaled_train_images = os.listdir(train_images_dir)
 
 print (len(scaled_train_images))
@@ -90,7 +90,7 @@ def generator(samples, batch_size=32):
             for batch_sample in batch_samples:
                 image_name = train_images_dir + batch_sample
                 image = cv2.imread(image_name)
-                image = cv2.resize(image, (input_shape[0], input_shape[1]))
+                #image = cv2.resize(image, (input_shape[0], input_shape[1]))
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 image = normalize(image)
                 key = batch_sample[:-4]
