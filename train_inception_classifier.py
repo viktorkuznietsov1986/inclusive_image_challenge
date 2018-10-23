@@ -6,9 +6,9 @@ import numpy as np
 import cv2
 import pickle
 
-#labels_file_name = './data/train_machine_labels.csv'
-#labels_file = pd.read_csv(labels_file_name)
+
 from models.inception import build_inceptionv3_based_classifier
+from sklearn.model_selection import train_test_split
 
 classes_file_name = './data/classes-trainable.csv'
 classes_file = pd.read_csv(classes_file_name)
@@ -55,9 +55,12 @@ for train_image in scaled_train_images:
 
 print (len(train_images))
 
-# split the samples to train and validation sets
-from sklearn.model_selection import train_test_split
-train_samples, validation_samples = train_test_split(train_images, test_size=0.09)
+# split the samples to train and dev sets
+# shuffle first
+sklearn.utils.shuffle(train_images)
+
+# the split is based on the current number of images - about 350000. there should be about 10500 images for dev set
+train_samples, validation_samples = train_test_split(train_images, test_size=0.03)
 
 
 # do the multi-hot encoding
