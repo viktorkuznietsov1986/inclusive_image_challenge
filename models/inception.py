@@ -10,7 +10,7 @@ def build_inceptionv3_based_classifier(input_shape, num_classes):
 
     model = Sequential()
     model.add(inceptionv3)
-    model.add(MaxPooling2D(pool_size=2), strides=2)
+    model.add(MaxPooling2D(pool_size=2, strides=2))
     model.add(Flatten())
     model.add(Dense(num_classes*3//2))
     model.add(BatchNormalization())
