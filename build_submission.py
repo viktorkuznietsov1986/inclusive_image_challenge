@@ -33,7 +33,7 @@ def normalize(img):
     return (img / 127.5) - 1.
 
 
-def predict(model, image_name, threshold=0.2):
+def predict(model, image_name, threshold=0.1):
     image = cv2.imread(image_name)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = cv2.resize(image, (input_shape[0], input_shape[1]))
