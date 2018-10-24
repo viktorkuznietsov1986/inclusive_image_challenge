@@ -1,5 +1,5 @@
 from keras.models import Sequential
-from keras.layers import Activation, Dense, Flatten, MaxPooling2D, BatchNormalization
+from keras.layers import Activation, Dense, Flatten, AveragePooling2D, Conv2D, MaxPooling2D, BatchNormalization
 from keras import applications
 
 
@@ -10,8 +10,10 @@ def build_inceptionv3_based_classifier(input_shape, num_classes):
 
     model = Sequential()
     model.add(inceptionv3)
-    model.add(MaxPooling2D(pool_size=2, strides=2))
-    model.add(Flatten())
+    model.add(Conv2D(num_classes, kernel_size=(1,1)))
+    model.add(AveragePooling2D())
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
     model.add(Dense(num_classes))
     model.add(BatchNormalization())
     model.add(Activation('relu'))
