@@ -20,7 +20,7 @@ test_images = os.listdir(test_images_dir)
 
 print (test_images[0])
 
-input_shape = (450, 450, 3)
+input_shape = (300, 300, 3)
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
 model.load_weights('model.h5')
@@ -33,7 +33,7 @@ def normalize(img):
     return (img / 127.5) - 1.
 
 
-def predict(model, image_name, threshold=0.1):
+def predict(model, image_name, threshold=0.4):
     image = cv2.imread(image_name)
     image = cv2.resize(image, (input_shape[0], input_shape[1]))
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
