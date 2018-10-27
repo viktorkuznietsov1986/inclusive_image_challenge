@@ -33,7 +33,7 @@ def normalize(img):
     return (img / 127.5) - 1.
 
 
-def predict(model, image_name, threshold=0.4):
+def predict(model, image_name):
     image = cv2.imread(image_name)
     image = cv2.resize(image, (input_shape[0], input_shape[1]))
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -41,13 +41,21 @@ def predict(model, image_name, threshold=0.4):
     image = np.reshape(image, [1, input_shape[0], input_shape[1], n_channels])
     prediction = model.predict(image)[0]
 
-    indices = np.argwhere(prediction >= threshold).flatten()
-    labels = " ".join(all_labels[indices].values)
+    indices02 = np.argwhere(prediction >= 0.2).flatten()
+    labels02 = " ".join(all_labels[indices02].values)
 
-    return labels
+    indices03 = np.argwhere(prediction >= 0.3).flatten()
+    labels03 = " ".join(all_labels[indices03].values)
+
+    indices04 = np.argwhere(prediction >= 0.4).flatten()
+    labels04 = " ".join(all_labels[indices04].values)
+
+    return labels02, labels03, labels04
 
 
-submission = {'image_id': [], 'labels': []}
+submission02 = {'image_id': [], 'labels': []}
+submission03 = {'image_id': [], 'labels': []}
+submission04 = {'image_id': [], 'labels': []}
 
 for index, img in enumerate(test_images):
     image_name = test_images_dir + img
@@ -57,11 +65,23 @@ for index, img in enumerate(test_images):
 
     image_id = img[:-4]
 
-    labels = predict(model, image_name)
+    labels02, labels03, labels04 = predict(model, image_name)
 
-    submission['image_id'].append(image_id)
-    submission['labels'].append(labels)
+    submission02['image_id'].append(image_id)
+    submission02['labels'].append(labels02)
+
+    submission03['image_id'].append(image_id)
+    submission03['labels'].append(labels03)
+
+    submission04['image_id'].append(image_id)
+    submission04['labels'].append(labels04)
 
 
-submission = pd.DataFrame(submission)
-submission.to_csv('inception_450x450_1_epoch.csv', index=False)
+submission02 = pd.DataFrame(submission02)
+submission02.to_csv('inception_300x300_02.csv', index=False)
+
+submission03 = pd.DataFrame(submission03)
+submission03.to_csv('inception_300x300_03.csv', index=False)
+
+submission04 = pd.DataFrame(submission04)
+submission04.to_csv('inception_300x300_04.csv', index=False)
