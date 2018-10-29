@@ -82,6 +82,20 @@ def normalize(img):
     return (img / 127.5) - 1.
 
 
+def generate_occurences(data):
+    occurences = {}
+
+    for value in data.values():
+        for label in value:
+            if label in occurences:
+                occurences[label] += 1
+            else:
+                occurences[label] = 1
+
+    return occurences
+
+labels_dict = generate_occurences(data)
+
 def create_class_weight(labels_dict, mu=0.15):
     # labels_dict : {ind_label: count_label}
     # mu : parameter to tune
@@ -97,7 +111,7 @@ def create_class_weight(labels_dict, mu=0.15):
 
     return class_weight
 
-W = create_class_weight(data)
+W = create_class_weight(labels_dict)
 
 # define the generator method which loads images in a batches
 def generator(samples, batch_size=32):
