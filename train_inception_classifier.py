@@ -6,11 +6,12 @@ import numpy as np
 import cv2
 import pickle
 
-from keras import backend as K
+import math
 
 
 from models.inception import build_inceptionv3_based_classifier
 from sklearn.model_selection import train_test_split
+from sklearn.utils import class_weight
 
 classes_file_name = './data/classes-trainable.csv'
 classes_file = pd.read_csv(classes_file_name)
@@ -80,10 +81,23 @@ input_shape = (450, 450, 3)
 def normalize(img):
     return (img / 127.5) - 1.
 
-def abs_KL_div(y_true, y_pred):
-    y_true = K.clip(y_true, K.epsilon(), None)
-    y_pred = K.clip(y_pred, K.epsilon(), None)
-    return K.sum( K.abs( (y_true- y_pred) * (K.log(y_true / y_pred))), axis=-1)
+
+def create_class_weight(labels_dict, mu=0.15):
+    # labels_dict : {ind_label: count_label}
+    # mu : parameter to tune
+
+    total = sum(labels_dict.values())
+    print (total)
+    keys = labels_dict.keys()
+    class_weight = dict()
+
+    for key in keys:
+        score = math.log(mu*total/float(labels_dict[key]))
+        class_weight[key] = score if score > 1.0 else 1.0
+
+    return class_weight
+
+W = create_class_weight(data)
 
 # define the generator method which loads images in a batches
 def generator(samples, batch_size=32):
