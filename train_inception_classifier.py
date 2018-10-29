@@ -118,7 +118,7 @@ def generator(samples, batch_size=32):
 
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
-model.compile(loss=abs_KL_div, optimizer='adam', metrics=["accuracy"])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=["accuracy"])
 
 """
 model.compile(loss='binary_crossentropy',
@@ -141,7 +141,7 @@ def train_model(model, train_generator, validation_generator, epochs=3):
     #early_stopping_callback = EarlyStopping(monitor='val_loss', patience=1) # no need to do early stopping as the model needs baby-sitting
     checkpoint_callback = ModelCheckpoint('model.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
 
-    model.fit_generator(train_generator, steps_per_epoch=len(train_samples)//batch_size, validation_data=validation_generator, validation_steps=len(validation_samples)//batch_size, epochs=epochs, callbacks=[checkpoint_callback], )
+    model.fit_generator(train_generator, class_weight=W, steps_per_epoch=len(train_samples)//batch_size, validation_data=validation_generator, validation_steps=len(validation_samples)//batch_size, epochs=epochs, callbacks=[checkpoint_callback], )
 
 
 # compile and train the model using the generator function
