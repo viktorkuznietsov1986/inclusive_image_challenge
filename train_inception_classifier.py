@@ -6,6 +6,8 @@ import numpy as np
 import cv2
 import pickle
 
+import keras as K
+
 
 from models.inception import build_inceptionv3_based_classifier
 from sklearn.model_selection import train_test_split
@@ -78,6 +80,10 @@ input_shape = (450, 450, 3)
 def normalize(img):
     return (img / 127.5) - 1.
 
+def abs_KL_div(y_true, y_pred):
+    y_true = K.clip(y_true, K.epsilon(), None)
+    y_pred = K.clip(y_pred, K.epsilon(), None)
+    return K.sum( K.abs( (y_true- y_pred) * (K.log(y_true / y_pred))), axis=-1)
 
 # define the generator method which loads images in a batches
 def generator(samples, batch_size=32):
@@ -112,7 +118,7 @@ def generator(samples, batch_size=32):
 
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
-model.compile(loss="binary_crossentropy", optimizer='adam', metrics=["accuracy"])
+model.compile(loss=abs_KL_div, optimizer='adam', metrics=["accuracy"])
 
 """
 model.compile(loss='binary_crossentropy',
