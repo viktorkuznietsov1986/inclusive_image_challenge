@@ -6,7 +6,7 @@ import numpy as np
 import cv2
 import pickle
 
-import keras as K
+from keras import backend as K
 
 
 from models.inception import build_inceptionv3_based_classifier
