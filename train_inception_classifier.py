@@ -178,7 +178,7 @@ def generator(samples, batch_size=32):
 
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
-model.compile(loss=f1_loss, optimizer='adam', metrics=["accuracy", f1])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=["accuracy", f1])
 
 """
 model.compile(loss='binary_crossentropy',
