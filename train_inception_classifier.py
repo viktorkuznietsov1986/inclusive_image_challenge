@@ -8,10 +8,7 @@ import pickle
 
 import math
 
-import tensorflow as tf
-import keras.backend as K
-
-
+from metrics import f_score
 from models.inception import build_inceptionv3_based_classifier
 from sklearn.model_selection import train_test_split
 from sklearn.utils import class_weight
@@ -116,35 +113,6 @@ def create_class_weight(labels_dict, mu=0.15):
 
 W = create_class_weight(labels_dict)
 
-
-def f1(y_true, y_pred):
-    y_pred = K.round(y_pred)
-    tp = K.sum(K.cast(y_true * y_pred, 'float'), axis=0)
-    tn = K.sum(K.cast((1 - y_true) * (1 - y_pred), 'float'), axis=0)
-    fp = K.sum(K.cast((1 - y_true) * y_pred, 'float'), axis=0)
-    fn = K.sum(K.cast(y_true * (1 - y_pred), 'float'), axis=0)
-
-    p = tp / (tp + fp + K.epsilon())
-    r = tp / (tp + fn + K.epsilon())
-
-    f1 = 2 * p * r / (p + r + K.epsilon())
-    f1 = tf.where(tf.is_nan(f1), tf.zeros_like(f1), f1)
-    return K.mean(f1)
-
-
-def f1_loss(y_true, y_pred):
-    tp = K.sum(K.cast(y_true * y_pred, 'float'), axis=0)
-    tn = K.sum(K.cast((1 - y_true) * (1 - y_pred), 'float'), axis=0)
-    fp = K.sum(K.cast((1 - y_true) * y_pred, 'float'), axis=0)
-    fn = K.sum(K.cast(y_true * (1 - y_pred), 'float'), axis=0)
-
-    p = tp / (tp + fp + K.epsilon())
-    r = tp / (tp + fn + K.epsilon())
-
-    f1 = 2 * p * r / (p + r + K.epsilon())
-    f1 = tf.where(tf.is_nan(f1), tf.zeros_like(f1), f1)
-    return 1 - K.mean(f1)
-
 # define the generator method which loads images in a batches
 def generator(samples, batch_size=32):
     num_samples = len(samples)
@@ -178,13 +146,8 @@ def generator(samples, batch_size=32):
 
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=["accuracy"])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=[f_score])
 
-"""
-model.compile(loss='binary_crossentropy',
-                  optimizer=optimizers.SGD(lr=1e-4,
-                                           momentum=0.9),
-                  metrics=['accuracy'])
 """
 
 model.summary()
