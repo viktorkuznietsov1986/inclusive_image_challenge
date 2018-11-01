@@ -148,8 +148,6 @@ def generator(samples, batch_size=32):
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=[f_score])
 
-"""
-
 model.summary()
 
 num_epochs = 5
