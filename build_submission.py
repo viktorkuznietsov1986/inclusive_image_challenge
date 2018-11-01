@@ -20,7 +20,7 @@ test_images = os.listdir(test_images_dir)
 
 print (test_images[0])
 
-input_shape = (300, 300, 3)
+input_shape = (450, 450, 3)
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
 model.load_weights('model.h5')
@@ -50,12 +50,16 @@ def predict(model, image_name):
     indices04 = np.argwhere(prediction >= 0.4).flatten()
     labels04 = " ".join(all_labels[indices04].values)
 
-    return labels02, labels03, labels04
+    indices05 = np.argwhere(prediction >= 0.5).flatten()
+    labels05 = " ".join(all_labels[indices05].values)
+
+    return labels02, labels03, labels04, labels05
 
 
 submission02 = {'image_id': [], 'labels': []}
 submission03 = {'image_id': [], 'labels': []}
 submission04 = {'image_id': [], 'labels': []}
+submission05 = {'image_id': [], 'labels': []}
 
 for index, img in enumerate(test_images):
     image_name = test_images_dir + img
@@ -65,7 +69,7 @@ for index, img in enumerate(test_images):
 
     image_id = img[:-4]
 
-    labels02, labels03, labels04 = predict(model, image_name)
+    labels02, labels03, labels04, labels05 = predict(model, image_name)
 
     submission02['image_id'].append(image_id)
     submission02['labels'].append(labels02)
@@ -76,12 +80,17 @@ for index, img in enumerate(test_images):
     submission04['image_id'].append(image_id)
     submission04['labels'].append(labels04)
 
+    submission05['image_id'].append(image_id)
+    submission05['labels'].append(labels05)
 
 submission02 = pd.DataFrame(submission02)
-submission02.to_csv('inception_300x300_02.csv', index=False)
+submission02.to_csv('inception_450x450_02.csv', index=False)
 
 submission03 = pd.DataFrame(submission03)
-submission03.to_csv('inception_300x300_03.csv', index=False)
+submission03.to_csv('inception_450x450_03.csv', index=False)
 
 submission04 = pd.DataFrame(submission04)
-submission04.to_csv('inception_300x300_04.csv', index=False)
+submission04.to_csv('inception_450x450_04.csv', index=False)
+
+submission05 = pd.DataFrame(submission05)
+submission05.to_csv('inception_450x450_05.csv', index=False)
