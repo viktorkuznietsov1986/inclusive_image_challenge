@@ -10,7 +10,6 @@ def build_inceptionv3_based_classifier(input_shape, num_classes):
 
     model = Sequential()
     model.add(inceptionv3)
-    model.add(Conv2D(4096, kernel_size=(1, 1)))
     model.add(GlobalAveragePooling2D())
     model.add(Dense(num_classes, activation='sigmoid'))
 
