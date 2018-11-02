@@ -8,6 +8,7 @@ import pickle
 
 import math
 
+from loss import focal_loss
 from metrics import f_score
 from models.inception import build_inceptionv3_based_classifier
 from sklearn.model_selection import train_test_split
@@ -146,11 +147,11 @@ def generator(samples, batch_size=32):
 
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=[f_score])
+model.compile(loss=focal_loss, optimizer='adam', metrics=[f_score])
 
 model.summary()
 
-num_epochs = 5
+num_epochs = 20
 
 batch_size = 8
 
@@ -162,7 +163,7 @@ def train_model(model, train_generator, validation_generator, epochs=3):
     #early_stopping_callback = EarlyStopping(monitor='val_loss', patience=1) # no need to do early stopping as the model needs baby-sitting
     checkpoint_callback = ModelCheckpoint('model.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
 
-    model.fit_generator(train_generator, class_weight=W, steps_per_epoch=len(train_samples)//batch_size, validation_data=validation_generator, validation_steps=len(validation_samples)//batch_size, epochs=epochs, callbacks=[checkpoint_callback], )
+    model.fit_generator(train_generator, steps_per_epoch=len(train_samples)//batch_size, validation_data=validation_generator, validation_steps=len(validation_samples)//batch_size, epochs=epochs, callbacks=[checkpoint_callback], )
 
 
 # compile and train the model using the generator function
