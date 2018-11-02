@@ -76,7 +76,7 @@ def multi_hot_encode(x, num_classes):
     return labels_encoded
 
 
-input_shape = (500, 500, 3)
+input_shape = (450, 450, 3)
 
 
 def normalize(img):
