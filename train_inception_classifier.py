@@ -150,9 +150,9 @@ def generator(samples, batch_size=32):
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
 
-sgd = optimizers.SGD(lr=0.1, momentum=0.0)
+#sgd = optimizers.SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 
-model.compile(loss=focal_loss, optimizer=sgd, metrics=[f_score])
+model.compile(loss=focal_loss, optimizer='adam', metrics=['accuracy', f_score])
 
 model.summary()
 
