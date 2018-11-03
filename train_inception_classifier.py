@@ -8,6 +8,8 @@ import pickle
 
 import math
 
+from keras import optimizers
+
 from loss import focal_loss
 from metrics import f_score
 from models.inception import build_inceptionv3_based_classifier
@@ -147,7 +149,10 @@ def generator(samples, batch_size=32):
 
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
-model.compile(loss=focal_loss, optimizer='adam', metrics=[f_score])
+
+sgd = optimizers.SGD(lr=0.1, momentum=0.0)
+
+model.compile(loss=focal_loss, optimizer=sgd, metrics=[f_score])
 
 model.summary()
 
