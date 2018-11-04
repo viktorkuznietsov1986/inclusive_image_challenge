@@ -176,3 +176,5 @@ train_generator = generator(train_samples, batch_size=batch_size)
 validation_generator = generator(validation_samples, batch_size=batch_size)
 
 train_model(model, train_generator, validation_generator, num_epochs)
+
+model.save_weights('model_final_weights.h5')
