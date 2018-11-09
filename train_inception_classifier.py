@@ -35,7 +35,7 @@ images_with_labels = {}
 # set up the threshold for the confidence of the machine label
 machine_label_threshold = .4
 
-train_images_dir = '../train_data/'
+train_images_dir = '../train_full/'
 scaled_train_images = os.listdir(train_images_dir)
 
 print (len(scaled_train_images))
