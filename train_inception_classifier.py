@@ -66,7 +66,7 @@ print (len(train_images))
 sklearn.utils.shuffle(train_images)
 
 # the split is based on the current number of images - about 350000. there should be about 10500 images for dev set
-train_samples, validation_samples = train_test_split(train_images, test_size=0.03)
+train_samples, validation_samples = train_test_split(train_images, test_size=0.01)
 
 
 # do the multi-hot encoding
