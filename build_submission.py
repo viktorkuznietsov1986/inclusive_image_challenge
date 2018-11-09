@@ -15,7 +15,7 @@ num_labels = len(all_labels)
 # build the index dictionary based on the labels collection
 labels_index = {label:idx for idx, label in enumerate(all_labels)}
 
-test_images_dir = './data/stage_1_test_images/'
+test_images_dir = './data/stage_2_test_images/'
 test_images = os.listdir(test_images_dir)
 
 print (test_images[0])
@@ -84,13 +84,13 @@ for index, img in enumerate(test_images):
     submission05['labels'].append(labels05)
 
 submission02 = pd.DataFrame(submission02)
-submission02.to_csv('inception_450x450_02.csv', index=False)
+submission02.to_csv('stage2_inception_450x450_02.csv', index=False)
 
 submission03 = pd.DataFrame(submission03)
-submission03.to_csv('inception_450x450_03.csv', index=False)
+submission03.to_csv('stage2_inception_450x450_03.csv', index=False)
 
 submission04 = pd.DataFrame(submission04)
-submission04.to_csv('inception_450x450_04.csv', index=False)
+submission04.to_csv('stage2_inception_450x450_04.csv', index=False)
 
 submission05 = pd.DataFrame(submission05)
-submission05.to_csv('inception_450x450_05.csv', index=False)
+submission05.to_csv('stage2_inception_450x450_05.csv', index=False)
