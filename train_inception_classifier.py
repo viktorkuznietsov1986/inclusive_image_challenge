@@ -78,7 +78,7 @@ def multi_hot_encode(x, num_classes):
     return labels_encoded
 
 
-input_shape = (450, 450, 3)
+input_shape = (200, 200, 3)
 
 
 def normalize(img):
@@ -150,7 +150,7 @@ def generator(samples, batch_size=32):
 
 model = build_inceptionv3_based_classifier(input_shape, num_labels)
 
-model.load_weights('model.h5')
+#model.load_weights('model.h5')
 
 #sgd = optimizers.SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 
